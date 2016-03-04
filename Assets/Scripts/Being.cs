@@ -5,6 +5,7 @@ public class Being : MonoBehaviour {
 
 	public float maxHP;
 	public float movementSpeed;
+	public float strength;
 
 	private float hp;
 
