@@ -6,8 +6,8 @@ public class Control : MonoBehaviour {
 	private Transform t;
 	private Being being;
 	private Rigidbody2D rb2d;
-	private float strength;
-	private ArrowLauncher arrowLauncher;
+	public IWeapon weapon;
+	private GameObject owner;
 
 
 	// Use this for initialization
@@ -15,22 +15,20 @@ public class Control : MonoBehaviour {
 		t = GetComponent <Transform> ();
 		being = GetComponent <Being> ();
 		rb2d = GetComponent <Rigidbody2D> ();
-		strength = being.strength;
-		arrowLauncher = GetComponent <ArrowLauncher> ();
+		weapon = GetComponent <ArrowLauncher> ();
+		owner = gameObject;
 	}
 
 	void Update () {
 		if (Input.GetMouseButtonUp (0) == true) {
-			arrowLauncher.Launch (t.position, AimDirection(), strength);
+			weapon.Activate (owner);
 		}
 	}
 
 	void FixedUpdate () {
 		Vector2 bVec = new Vector2 (Input.GetAxis ("Horizontal"),Input.GetAxis ("Vertical"));
 		bVec.Normalize ();
-		Vector2 vel = rb2d.velocity;
-		vel = bVec * being.movementSpeed;
-		rb2d.velocity = vel;
+		rb2d.velocity = bVec * being.movementSpeed;
 	}
 
 	public float AimDirection () {
@@ -38,4 +36,5 @@ public class Control : MonoBehaviour {
 		mouseLocation = mouseLocation - ((Vector2) t.position);
 		return Mathf.Atan2 (mouseLocation.y, mouseLocation.x) * Mathf.Rad2Deg;
 	}
+		
 }

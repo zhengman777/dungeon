@@ -1,22 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ArrowLauncher : MonoBehaviour {
+public class ArrowLauncher : MonoBehaviour, IWeapon {
 
 	public Arrow arrow;
 	public float arrowLauncherSpeed;
 	public float arrowLauncherSecondsToDestroy;
 
-	public void Launch (Vector3 position, float direction, float damage) {
+	public void Activate (GameObject owner) {
 		Arrow a = Instantiate (arrow) as Arrow;
-		Transform t = a.GetComponent <Transform> ();
-		t.position = position;
-		Vector3 angle = t.eulerAngles;
-		angle.z = direction;
-		t.eulerAngles = angle;
-		a.velocity = new Vector2 (Mathf.Cos (direction * Mathf.Deg2Rad), Mathf.Sin (direction * Mathf.Deg2Rad)) * arrowLauncherSpeed;
-		a.direction = direction;
+		Transform arrowT = a.GetComponent <Transform> ();
+		Rigidbody2D arrowRB2D = a.GetComponent <Rigidbody2D> ();
+
+		Transform ownerT = owner.GetComponent <Transform> ();
+		Control ownerControl = owner.GetComponent <Control> ();
+		Being ownerBeing = owner.GetComponent <Being> ();
+
+		a.direction = ownerControl.AimDirection();
+		float arrowPositionX = ownerT.position.x + Mathf.Cos (a.direction * Mathf.Deg2Rad) * .5f;
+		float arrowPositionY = ownerT.position.y + Mathf.Sin (a.direction * Mathf.Deg2Rad) * .5f;
+		arrowT.position = new Vector3 (arrowPositionX, arrowPositionY, 0);
+		Vector3 angle = arrowT.eulerAngles;
+		angle.z = a.direction;
+		arrowT.eulerAngles = angle;
+		arrowRB2D.velocity = new Vector2 (Mathf.Cos (a.direction * Mathf.Deg2Rad), Mathf.Sin (a.direction * Mathf.Deg2Rad)) * arrowLauncherSpeed;
+
 		a.secondsToDestroy = arrowLauncherSecondsToDestroy;
-		a.damage = damage;
+		a.damage = ownerBeing.strength;
+		a.owner = owner;
 	}
 }
