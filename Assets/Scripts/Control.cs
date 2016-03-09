@@ -3,19 +3,21 @@ using System.Collections;
 
 public class Control : MonoBehaviour {
 
+	public Weapon weapon;
+
 	private Transform t;
 	private Being being;
 	private Rigidbody2D rb2d;
-	public IWeapon weapon;
 	private GameObject owner;
+	private string weaponClass;
 
 
 	// Use this for initialization
 	void Start () {
 		t = GetComponent <Transform> ();
 		being = GetComponent <Being> ();
+		weaponClass = "ArrowLauncher";
 		rb2d = GetComponent <Rigidbody2D> ();
-		weapon = GetComponent <ArrowLauncher> ();
 		owner = gameObject;
 	}
 

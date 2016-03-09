@@ -1,13 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ArrowLauncher : MonoBehaviour, IWeapon {
+public class ArrowLauncher : Weapon {
 
 	public Arrow arrow;
 	public float arrowLauncherSpeed;
 	public float arrowLauncherSecondsToDestroy;
 
-	public void Activate (GameObject owner) {
+	private Transform t;
+
+	void Start () {
+		t = GetComponent <Transform> ();
+	}
+
+	public override void Activate (GameObject owner) {
 		Arrow a = Instantiate (arrow) as Arrow;
 		Transform arrowT = a.GetComponent <Transform> ();
 		Rigidbody2D arrowRB2D = a.GetComponent <Rigidbody2D> ();
@@ -28,5 +34,9 @@ public class ArrowLauncher : MonoBehaviour, IWeapon {
 		a.secondsToDestroy = arrowLauncherSecondsToDestroy;
 		a.damage = ownerBeing.strength;
 		a.owner = owner;
+	}
+
+	void Update () {
+		
 	}
 }

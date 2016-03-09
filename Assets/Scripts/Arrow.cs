@@ -29,6 +29,7 @@ public class Arrow : MonoBehaviour {
 		if (other.gameObject.GetComponent <Immunity> () != null && other.gameObject != owner) {
 			Immunity immunity = other.gameObject.GetComponent <Immunity> ();
 			Being target = other.gameObject.GetComponent <Being> ();
+			target.hp -= damage;
 			if (immunity.canKnockBack == true) {
 				Rigidbody2D otherRigid = other.gameObject.GetComponent <Rigidbody2D> ();
 				Vector3 angle = transform.eulerAngles;
