@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ArrowLauncher : MonoBehaviour, IWeapon {
+public class ArrowLauncher : MonoBehaviour, Weapon {
 
 	public Arrow arrow;
 	public float arrowLauncherSpeed;

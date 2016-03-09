@@ -4,10 +4,9 @@ using System.Collections;
 public class Being : MonoBehaviour {
 
 	public float maxHP;
+	public float hp;
 	public float movementSpeed;
 	public float strength;
-
-	private float hp;
 
 	// Use this for initialization
 	void Start () {
@@ -16,6 +15,8 @@ public class Being : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (hp <= 0) {
+			Destroy (gameObject);
+		}
 	}
 }
