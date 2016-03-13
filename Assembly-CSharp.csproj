@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\ArrowLauncher.cs" />
      <Compile Include="Assets\Scripts\Being.cs" />
      <Compile Include="Assets\Scripts\BoardManager.cs" />
+     <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\Control.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Immunity.cs" />

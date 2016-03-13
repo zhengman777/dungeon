@@ -15,32 +15,76 @@ public class BoardManager : MonoBehaviour {
 			maximum = max;
 		}
 	}
-
-	public int columns = 8;
-	public int rows = 8;
+		
 	public Count wallCount = new Count (1,2);
-	public GameObject[] floorTiles;
-	public GameObject[] wallTiles;
+	public GameObject floorTile;
+	public GameObject wallTile;
+	public GameObject doorTile;
 	public GameObject[] enemyTiles;
 
 	private Transform boardHolder;
 	private List <Vector3> gridPositions = new List<Vector3>();
+	private int roomType;
+	private int roomLength;
+	private int roomWidth;
+	private int roomsNeeded;
+	private int roomsMade;
+	private int columns;
+	private int rows;
 
-	void InitializeList() {
+	/*void InitializeList() {
 		gridPositions.Clear ();
+
+
 
 		for (int x = 1; x < columns - 1; x++) {
 			for (int y = 1; y < rows - 1; y++) {
 				gridPositions.Add (new Vector3 (x, y, 0f));
 			}
 		}
-	}
+	}*/
 
 	void BoardSetup() {
+
 		boardHolder = new GameObject ("Board").transform;
+
+		for (roomsMade = 0; roomsMade < roomsNeeded; roomsMade++) {
+			roomType = Random.Range (1, 2);
+
+			//Rectangular
+			if (roomType == 1) {
+				roomLength = Random.Range (8, 17) * 2;
+				roomWidth = Random.Range (8, 17) * 2;
+				for (int x = -1; x < roomWidth + 1; x++) {
+					for (int y = -1; y < roomLength + 1; y++) {
+						GameObject toInstantiate = floorTile;
+						if (x == -1 || x == roomWidth || y == -1 || y == roomLength) {
+							if (y == roomLength && (x == roomWidth / 2 -1 || x == roomWidth / 2)) {
+								toInstantiate = doorTile;
+							} 
+							else {
+								toInstantiate = wallTile;
+							}
+
+						}
+						GameObject instance = Instantiate (toInstantiate, new Vector3 (x, y, 0f), Quaternion.identity) as GameObject;
+						instance.transform.SetParent (boardHolder);
+					}
+				}
+			}
+
+			//Cornered
+			if (roomType == 2) {
+
+			}
+		}
+	}
+
+		/*boardHolder = new GameObject ("Board").transform;
 
 		for (int x = -1; x < columns + 1; x++) {
 			for (int y = -1; y < rows + 1; y++) {
+				
 				GameObject toInstantiate = floorTiles[Random.Range (0, floorTiles.Length)];
 				if (x == -1 || x == columns || y == -1 || y == rows) 
 					toInstantiate = wallTiles [Random.Range (0, wallTiles.Length)];
@@ -67,14 +111,15 @@ public class BoardManager : MonoBehaviour {
 			GameObject tileChoice = tileArray [Random.Range (0, tileArray.Length)];
 			Instantiate (tileChoice, randomPosition, Quaternion.identity);
 		}
-
 	}
+	*/
 
-	public void SetupScene (int level) {
+	public void SetupScene (int rooms) {
+		roomsNeeded = rooms;
 		BoardSetup ();
-		InitializeList ();
+		/*InitializeList ();
 		LayoutObjectAtRandom (wallTiles, wallCount.minimum, wallCount.maximum);
-		int enemyCount = (int)Mathf.Log (level, 2f);
-		LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
+		int enemyCount = 1;
+		LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);*/
 	}
 }

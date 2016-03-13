@@ -4,9 +4,13 @@ using System.Collections;
 public class GameManager : MonoBehaviour {
 
 	public static GameManager instance = null;
-	public BoardManager boardScript;
+	public GameObject player;
+	public Camera mainCamera;
 
-	private int level = 3;
+
+	private int rooms = 1;
+	private BoardManager boardScript;
+	private CameraController cameraController;
 
 	// Use this for initialization
 	void Awake () {
@@ -17,16 +21,19 @@ public class GameManager : MonoBehaviour {
 
 		DontDestroyOnLoad (gameObject);
 		boardScript = GetComponent<BoardManager> ();
+		cameraController = mainCamera.GetComponent<CameraController> ();
 		InitGame ();
 	
 	}
 
 	void InitGame () {
-		boardScript.SetupScene (level);
+		boardScript.SetupScene (rooms);
+		GameObject instance = Instantiate (player, new Vector3 (0f, 0f, 0f), Quaternion.identity) as GameObject;
+		cameraController.SetPlayer(instance);
 	}
 
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 }
