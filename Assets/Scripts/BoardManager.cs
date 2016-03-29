@@ -16,33 +16,35 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 		
-	public Count wallCount = new Count (1,2);
+	public Count pillarCount;
 	public GameObject floorTile;
-	public GameObject wallTile;
 	public GameObject doorTile;
-	public GameObject[] enemyTiles;
+	public GameObject wallTile;
+	public GameObject pillarTile;
+	public GameObject zombieTile;
+	public List <GameObject> enemies = new List<GameObject> ();
+	public List <GameObject> doors = new List<GameObject> ();
 
 	private Transform boardHolder;
 	private List <Vector3> gridPositions = new List<Vector3>();
 	private int roomType;
 	private int roomLength;
 	private int roomWidth;
+	private int roomArea;
 	private int roomsNeeded;
 	private int roomsMade;
-	private int columns;
-	private int rows;
+	private int enemyCount;
 
-	/*void InitializeList() {
+	void InitializeList() {
 		gridPositions.Clear ();
 
 
-
-		for (int x = 1; x < columns - 1; x++) {
-			for (int y = 1; y < rows - 1; y++) {
+		for (int x = 1; x < roomWidth - 1; x++) {
+			for (int y = 1; y < roomLength - 1; y++) {
 				gridPositions.Add (new Vector3 (x, y, 0f));
 			}
 		}
-	}*/
+	}
 
 	void BoardSetup() {
 
@@ -55,6 +57,8 @@ public class BoardManager : MonoBehaviour {
 			if (roomType == 1) {
 				roomLength = Random.Range (8, 17) * 2;
 				roomWidth = Random.Range (8, 17) * 2;
+				roomArea = roomLength * roomWidth;
+				pillarCount = new Count ((int) Mathf.Round(roomArea / 10), (int) Mathf.Round(roomArea / 10));
 				for (int x = -1; x < roomWidth + 1; x++) {
 					for (int y = -1; y < roomLength + 1; y++) {
 						GameObject toInstantiate = floorTile;
@@ -68,6 +72,9 @@ public class BoardManager : MonoBehaviour {
 
 						}
 						GameObject instance = Instantiate (toInstantiate, new Vector3 (x, y, 0f), Quaternion.identity) as GameObject;
+						if (toInstantiate == doorTile) {
+							doors.Add (instance);
+						}
 						instance.transform.SetParent (boardHolder);
 					}
 				}
@@ -79,23 +86,7 @@ public class BoardManager : MonoBehaviour {
 			}
 		}
 	}
-
-		/*boardHolder = new GameObject ("Board").transform;
-
-		for (int x = -1; x < columns + 1; x++) {
-			for (int y = -1; y < rows + 1; y++) {
-				
-				GameObject toInstantiate = floorTiles[Random.Range (0, floorTiles.Length)];
-				if (x == -1 || x == columns || y == -1 || y == rows) 
-					toInstantiate = wallTiles [Random.Range (0, wallTiles.Length)];
-
-					GameObject instance = Instantiate (toInstantiate, new Vector3 (x, y, 0f), Quaternion.identity) as GameObject;
-
-					instance.transform.SetParent (boardHolder);
-			}
-		}
-	}
-
+		
 	Vector3 RandomPosition() {
 		int randomIndex = Random.Range (0, gridPositions.Count);
 		Vector3 randomPosition = gridPositions [randomIndex];
@@ -103,23 +94,29 @@ public class BoardManager : MonoBehaviour {
 		return randomPosition;
 	}
 
-	void LayoutObjectAtRandom(GameObject[] tileArray, int minimum, int maximum) {
+	void LayoutObjectAtRandom(GameObject tile, int minimum, int maximum) {
 		int objectCount = Random.Range (minimum, maximum + 1);
 
 		for (int i = 0; i < objectCount; i++) {
 			Vector3 randomPosition = RandomPosition ();
-			GameObject tileChoice = tileArray [Random.Range (0, tileArray.Length)];
-			Instantiate (tileChoice, randomPosition, Quaternion.identity);
+			GameObject instance = Instantiate (tile, randomPosition, Quaternion.identity) as GameObject;
+			if (tile == zombieTile) {
+				enemies.Add (instance);
+			}
+			instance.transform.SetParent (boardHolder);
+
 		}
 	}
-	*/
 
 	public void SetupScene (int rooms) {
+		
 		roomsNeeded = rooms;
+		enemyCount = 3;
+
 		BoardSetup ();
-		/*InitializeList ();
-		LayoutObjectAtRandom (wallTiles, wallCount.minimum, wallCount.maximum);
-		int enemyCount = 1;
-		LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);*/
+		InitializeList ();
+		LayoutObjectAtRandom (zombieTile, enemyCount, enemyCount);
+		LayoutObjectAtRandom (pillarTile, pillarCount.minimum, pillarCount.maximum);
+
 	}
 }

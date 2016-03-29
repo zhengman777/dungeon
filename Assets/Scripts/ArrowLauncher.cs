@@ -7,10 +7,8 @@ public class ArrowLauncher : Weapon {
 	public float arrowLauncherSpeed;
 	public float arrowLauncherSecondsToDestroy;
 
-	private Transform t;
-
 	void Start () {
-		t = GetComponent <Transform> ();
+		
 	}
 
 	public override void Activate (GameObject owner) {
